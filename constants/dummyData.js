@@ -14,12 +14,12 @@ const categories = [
   },
   {
     id: 2,
-    name: "Fruit Item",
+    name: "Frutas",
     icon: icons.cherry,
   },
   {
     id: 3,
-    name: "Rice Item",
+    name: "Mexicano",
     icon: icons.rice,
   },
 ];
