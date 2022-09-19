@@ -15,6 +15,8 @@ import {
 } from "../constants";
 import Animated from "react-native-reanimated";
 import { useState } from "react";
+import { connect } from "react-redux";
+import { setSelectedTab } from "../stores/tab/tabActions";
 
 const Drawer = createDrawerNavigator();
 
@@ -50,7 +52,7 @@ const CustomDrawerItem = ({ label, icon, isFocused, onPress }) => {
   );
 };
 
-const CustomDrawerContent = ({ navigation }) => {
+const CustomDrawerContent = ({ navigation, selectedTab, setSelectedTab }) => {
   return (
     <DrawerContentScrollView
       scrollEnabled={true}
@@ -101,8 +103,11 @@ const CustomDrawerContent = ({ navigation }) => {
           <CustomDrawerItem
             label={constants.screens.home}
             icon={icons.home}
-            // isFocused={selectedTab == constants.screens.home}
-            onPress={() => navigation.navigate("MainLayout")}
+            isFocused={selectedTab == constants.screens.home}
+            onPress={() => {
+              setSelectedTab(constants.screens.home);
+              navigation.navigate("MainLayout");
+            }}
           />
           <CustomDrawerItem
             label={constants.screens.my_wallet}
@@ -111,10 +116,20 @@ const CustomDrawerContent = ({ navigation }) => {
           <CustomDrawerItem
             label={constants.screens.notification}
             icon={icons.notification}
+            isFocused={selectedTab == constants.screens.notification}
+            onPress={() => {
+              setSelectedTab(constants.screens.notification);
+              navigation.navigate("MainLayout");
+            }}
           />
           <CustomDrawerItem
             label={constants.screens.favourite}
             icon={icons.favourite}
+            isFocused={selectedTab == constants.screens.favourite}
+            onPress={() => {
+              setSelectedTab(constants.screens.favourite);
+              navigation.navigate("MainLayout");
+            }}
           />
 
           {/* Line Divider */}
@@ -142,7 +157,7 @@ const CustomDrawerContent = ({ navigation }) => {
   );
 };
 
-const CustomDrawer = () => {
+const CustomDrawer = ({ selectedTab, setSelectedTab }) => {
   const [progress, setProgress] = useState(new Animated.Value(0));
 
   const scale = Animated.interpolateNode(progress, {
@@ -182,8 +197,8 @@ const CustomDrawer = () => {
           return (
             <CustomDrawerContent
               navigation={props.navigation}
-              // selectedTab={selectedTab}
-              // setSelectedTab={setSelectedTab}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
             />
           );
         }}
@@ -198,18 +213,18 @@ const CustomDrawer = () => {
   );
 };
 
-// function mapStateToProps(state) {
-//   return {
-//     selectedTab: state.tabReducer.selectedTab,
-//   };
-// }
+function mapStateToProps(state) {
+  return {
+    selectedTab: state.tabReducer.selectedTab,
+  };
+}
 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     setSelectedTab: (selectedTab) => {
-//       return dispatch(setSelectedTab(selectedTab));
-//     },
-//   };
-// }
+function mapDispatchToProps(dispatch) {
+  return {
+    setSelectedTab: (selectedTab) => {
+      return dispatch(setSelectedTab(selectedTab));
+    },
+  };
+}
 
-export default CustomDrawer;
+export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawer);

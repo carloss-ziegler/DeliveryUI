@@ -5,29 +5,30 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import CustomDrawer from "./routes/CustomDrawer";
 
-import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import thunk from "redux-thunk";
 import rootReducer from "./stores/rootReducer";
+import { configureStore } from "@reduxjs/toolkit";
 
 const Stack = createStackNavigator();
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = configureStore({ reducer: rootReducer });
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          initialRouteName={"Home"}
-        >
-          <Stack.Screen name="Home" component={CustomDrawer} />
-        </Stack.Navigator>
-      </NavigationContainer>
-      <StatusBar style="auto" />
-    </Provider>
+    <>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+            initialRouteName={"Home"}
+          >
+            <Stack.Screen name="Home" component={CustomDrawer} />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <StatusBar style="auto" />
+      </Provider>
+    </>
   );
 };
 
